@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-4.0.0.min.js" integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" 
+    crossorigin="anonymous">
+    </script>
+    <script>
+        $(function(){
+
+            $("#jablko").css({
+                "magrin-left": Math.floor((Math.random() * 1000) + 1) + "px",
+                "magrin-top": Math.floor((Math.random() * 1000) + 1) + "px"
+            })
+
+            let x = 0
+            let y = 0
+            $(document).on("keydown", function(){
+                
+                if(event.key === "a") {
+                    x -= 10
+                    $("#kwadrat").css("margin-left", x + "px")
+                }
+                if(event.key === "d") {
+                    x += 10
+                    $("#kwadrat").css("margin-left", x + "px")
+                }
+                if(event.key === "w") {
+                    y -= 10
+                    $("#kwadrat").css("margin-top", y + "px")
+                }
+                if(event.key === "s") {
+                    y += 10
+                    $("#kwadrat").css("margin-top", y + "px")
+                }
+            })
+
+            $(document).on("mousemove", function(){
+                $("#pageX").text(event.pageX)
+                $("#pageY").text(event.pageY)
+            })
+        })
+    </script>
+
+    <style>
+        #kwadrat {
+            width: 200px;
+            height: 200px;
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+
+    <input type="text" id="pole">
+
+    <p>
+
+        Typ zdarzenia:
+        <span id="eventType">---</span>
+
+    </p>
+
+    <p>
+        Pozycja myszy:
+        x = <span id="pageX">---</span>
+        y = <span id="pageY">---</span>
+    </p>
+
+    <div id="kwadrat"></div>
+    <div id="jablko"></div>
+
+</body>
+</html>

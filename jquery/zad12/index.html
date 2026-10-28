@@ -1,0 +1,290 @@
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zadania jQuery</title>
+
+    <script src="https://code.jquery.com/jquery-4.0.0.min.js"></script>
+
+    <script>
+        $(function () {
+
+            // ZADANIE 1 - Wyszukiwanie
+            $(document).on("keydown", function (event) {
+                let szukana = $("#szukaj").val();
+
+                if (event.key === "Enter" && $("#szukaj").is(":focus")) {
+                    if (szukana.trim().length === 0) {
+                        $("#wynik")
+                            .text("Wpisz frazę!")
+                            .css("color", "red");
+                    } else {
+                        $("#wynik")
+                            .text("Szukam: " + szukana)
+                            .css("color", "black");
+                    }
+                }
+
+                if (event.key === "Escape") {
+                    $("#szukaj").val("");
+                    $("#wynik").text("");
+                }
+            });
+
+
+            // ZADANIE 2 - Siła hasła
+            $("#haslo").on("input", function () {
+                let haslo = $("#haslo").val();
+                let moc = haslo.length;
+
+                if (moc < 6) {
+                    $("#sila")
+                        .text("Słabe")
+                        .removeClass("srednie silne")
+                        .addClass("slabe");
+                } else if (moc <= 9) {
+                    $("#sila")
+                        .text("Średnie")
+                        .removeClass("slabe silne")
+                        .addClass("srednie");
+                } else {
+                    $("#sila")
+                        .text("Silne")
+                        .removeClass("slabe srednie")
+                        .addClass("silne");
+                }
+
+                if (moc === 0) {
+                    $("#sila").text("").removeClass("slabe srednie silne");
+                }
+            });
+
+
+            // ZADANIE 3 - Formularz logowania
+            $("#logowanie").on("submit", function (event) {
+                event.preventDefault();
+
+                let login = $("#login").val().trim();
+                let haslo = $("#pass").val();
+
+                if (login === "") {
+                    $("#info")
+                        .text("Podaj login")
+                        .removeClass("sukces")
+                        .addClass("blad");
+                } else if (haslo.length < 6) {
+                    $("#info")
+                        .text("Hasło za krótkie")
+                        .removeClass("sukces")
+                        .addClass("blad");
+                } else {
+                    $("#info")
+                        .text("Witaj, " + login + "!")
+                        .removeClass("blad")
+                        .addClass("sukces");
+                }
+            });
+
+
+            // ZADANIE 4 - Wybór rozmiaru czcionki
+            $("#rozmiar").on("change", function () {
+                let rozmiar = Number($(this).val());
+
+                $("#tekst").css("font-size", rozmiar + "px");
+                $("#aktualny").text(
+                    "Aktualny rozmiar: " + rozmiar + " px"
+                );
+            });
+
+            // Ustawienie początkowego rozmiaru
+            $("#rozmiar").trigger("change");
+
+
+            // ZADANIE 5 - Zamówienie z dodatkami
+            function przeliczCene() {
+                let suma = 20;
+
+                $(".dodatek:checked").each(function () {
+                    suma += Number($(this).val());
+                });
+
+                $("#suma").text(suma);
+            }
+
+            $(".dodatek").on("change", function () {
+                przeliczCene();
+            });
+
+            $("#akcept").on("change", function () {
+                $("#zamow").prop("disabled", !$(this).is(":checked"));
+            });
+
+            $("#zamow").on("click", function () {
+                $("#zamowInfo")
+                    .text("Zamówienie zostało złożone!")
+                    .css("color", "green");
+            });
+
+
+            // ZADANIE 6 - Kalkulator BMI z walidacją
+            $("#licz").on("click", function () {
+                let wagaTekst = $("#waga").val().trim();
+                let wzrostTekst = $("#wzrost").val().trim();
+
+                if (wagaTekst === "" || wzrostTekst === "") {
+                    $("#bmi")
+                        .text("Wypełnij oba pola!")
+                        .css("color", "red");
+                    return;
+                }
+
+                let waga = Number(wagaTekst);
+                let wzrost = Number(wzrostTekst);
+
+                if (isNaN(waga) || isNaN(wzrost)) {
+                    $("#bmi")
+                        .text("Wpisz poprawne liczby!")
+                        .css("color", "red");
+                    return;
+                }
+
+                if (waga < 20 || waga > 300) {
+                    $("#bmi")
+                        .text("Waga musi być w zakresie 20–300 kg.")
+                        .css("color", "red");
+                    return;
+                }
+
+                if (wzrost < 100 || wzrost > 250) {
+                    $("#bmi")
+                        .text("Wzrost musi być w zakresie 100–250 cm.")
+                        .css("color", "red");
+                    return;
+                }
+
+                let bmi = waga / Math.pow(wzrost / 100, 2);
+
+                $("#bmi")
+                    .text("Twoje BMI: " + bmi.toFixed(1))
+                    .css("color", "green");
+            });
+
+        });
+    </script>
+</head>
+
+    <style>
+        .slabe {
+            background-color: red;
+        }
+
+        .srednie {
+            background-color: orange;
+        }
+
+        .silne {
+            background-color: green;
+        }
+
+        .blad {
+            color: red;
+        }
+
+        .sukces {
+            color: green;
+        }
+
+        section {
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ccc;
+        }
+    </style>
+
+
+<body>
+
+    <section>
+        <h2>Zadanie 1 - Wyszukiwanie</h2>
+        <input type="text" id="szukaj" placeholder="Szukaj...">
+        <p id="wynik"></p>
+    </section>
+
+    <section>
+        <h2>Zadanie 2 - Siła hasła</h2>
+        <input type="password" id="haslo" placeholder="Wpisz hasło">
+        <p id="sila"></p>
+    </section>
+
+    <section>
+        <h2>Zadanie 3 - Formularz logowania</h2>
+
+        <form id="logowanie">
+            <input type="text" id="login" placeholder="Login">
+            <input type="password" id="pass" placeholder="Hasło">
+            <button type="submit">Zaloguj</button>
+        </form>
+
+        <p id="info"></p>
+    </section>
+
+    <section>
+        <h2>Zadanie 4 - Wybór rozmiaru czcionki</h2>
+
+        <select id="rozmiar">
+            <option value="14">Mały</option>
+            <option value="20">Średni</option>
+            <option value="28">Duży</option>
+        </select>
+
+        <p id="tekst">Przykładowy tekst akapitu.</p>
+        <p id="aktualny"></p>
+    </section>
+
+    <section>
+        <h2>Zadanie 5 - Zamówienie z dodatkami</h2>
+
+        <label>
+            <input type="checkbox" class="dodatek" value="3">
+            Ser (3 zł)
+        </label>
+        <br>
+
+        <label>
+            <input type="checkbox" class="dodatek" value="5">
+            Szynka (5 zł)
+        </label>
+        <br>
+
+        <label>
+            <input type="checkbox" class="dodatek" value="4">
+            Pieczarki (4 zł)
+        </label>
+
+        <p>Cena: <span id="suma">20</span> zł</p>
+
+        <label>
+            <input type="checkbox" id="akcept">
+            Potwierdzam zamówienie
+        </label>
+        <br><br>
+
+        <button id="zamow" disabled>Zamów</button>
+        <p id="zamowInfo"></p>
+    </section>
+
+    <section>
+        <h2>Zadanie 6 - Kalkulator BMI</h2>
+
+        <input type="text" id="waga" placeholder="Waga (kg)">
+        <input type="text" id="wzrost" placeholder="Wzrost (cm)">
+
+        <button type="button" id="licz">Oblicz</button>
+
+        <p id="bmi"></p>
+    </section>
+
+</body>
+</html>
